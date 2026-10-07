@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --watch app.js"
@@ -21,7 +20,9 @@
   },
   "homepage": "https://github.com/ka6629/earchive#readme",
   "dependencies": {
+    "dotenv": "^18.0.6",
     "ejs": "^6.0.1",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mysql2": "^3.24.5"
   }
 }
