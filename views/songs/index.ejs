@@ -1,0 +1,17 @@
+<%- include('../partials/header') %>
+
+<h1>曲一覧</h1>
+
+<% if (songs.length === 0) { %>
+    <p>まだ曲が登録されていません。</p>
+<% } else { %>
+    <p>全<%= songs.length %>曲</p>
+    <ul>
+        <% songs.forEach((song) => { %>
+
+            <li><%= song.title %> / <%= song.artist_name %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+<%- include('../partials/footer') %>

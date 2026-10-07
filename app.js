@@ -1,4 +1,5 @@
 import express from 'express';
+import pool from './db/pool.js';
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +13,13 @@ app.get('/', (req, res) => {
 
 app.get('/about', (req, res) => {
     res.render('about', {title:'Earchiveについて'});
+});
+
+app.get('/songs', async(req, res) => {
+    const [songs] = await pool.query(
+        'SELECT id, title, artist_name FROM songs ORDER BY id DESC'
+    );
+    res.render('songs/index', {title: '曲一覧', songs});
 });
 
 app.listen(PORT, () => {
