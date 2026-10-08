@@ -38,6 +38,16 @@ app.post('/songs', async (req, res) => {
     res.redirect('/songs');
 });
 
+app.get('/songs/:id', async (req, res) => {
+    const{ id } = req.params;
+    const [rows] = await pool.query('SELECT id, title, artist_name, created_at FROM songs WHERE id = ?', [id]);
+    if(rows.length === 0){
+        return res.status(404).send('曲が見つかりません');
+    }
+    const song = rows[0];
+    res.render('songs/show', {title: song.title,song});
+});
+
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT} is running`);
 });
