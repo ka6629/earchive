@@ -1,0 +1,17 @@
+<%- include('../partials/header') %>
+
+<h1>曲を登録</h1>
+
+<form action="/songs" method="POST">
+    <div>
+        <label for="title">曲名</label>
+        <input type="text" id="title" name="title">
+    </div>
+    <div>
+        <label for="artist_name">アーティスト</label>
+        <input type="text" id="artist_name" name="artist_name">
+    </div>
+    <button type="submit">登録</button>
+</form>
+
+<%- include('../partials/footer') %>
