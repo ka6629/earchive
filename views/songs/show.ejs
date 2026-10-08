@@ -1,0 +1,12 @@
+<%- include('../partials/header') %>
+
+<h1> <%= song.title %> </h1>
+
+<p> <%= song.artist_name %> </p>
+
+<p>登録日:<%= song.created_at.toLocaleDateString('ja-JP') %></p>
+
+<a href="/songs">←曲一覧に戻る</a>
+
+<%- include('../partials/footer') %>
+
