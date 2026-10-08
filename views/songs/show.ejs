@@ -6,6 +6,8 @@
 
 <p>登録日:<%= song.created_at.toLocaleDateString('ja-JP') %></p>
 
+<a href = '/songs/<%= song.id %>/edit'>編集する</a>
+
 <a href="/songs">←曲一覧に戻る</a>
 
 <%- include('../partials/footer') %>
