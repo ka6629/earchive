@@ -8,7 +8,11 @@
 
 <a href = '/songs/<%= song.id %>/edit'>編集する</a>
 
-<a href="/songs">←曲一覧に戻る</a>
+<form action="/songs/<%= song.id %>/delete" method="POST" onsubmit="return confirm('この曲を削除しますか？')">
+  <button type="submit">削除する</button>
+</form>
+
+<a href="/songs">曲一覧に戻る</a>
 
 <%- include('../partials/footer') %>
 

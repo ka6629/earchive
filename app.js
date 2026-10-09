@@ -67,6 +67,12 @@ app.post('/songs/:id/update', async (req, res) => {
     res.redirect(`/songs/${id}`);
 });
 
+app.post('/songs/:id/delete', async (req, res) => {
+    const { id } = req.params;
+    await pool.query('DELETE FROM songs WHERE id = ?', [id]);
+    res.redirect('/songs');
+});
+
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT} is running`);
 });
