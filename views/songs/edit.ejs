@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+
+<h1>曲を編集</h1>
+
+<form action = "/songs/<%= song.id %>/update" method="POST">
+    <div>
+        <label for="title">曲名</label>
+        <input type="text" id="title" name="title" value="<%= song.title %>">
+    </div>
+    <div>
+        <label for="artist_name">アーティスト</label>
+        <input type="text" id="artist_name" name="artist_name" value="<%= song.artist_name %>">
+    </div>
+    <button type="submit">保存する</button>
+</form>
+
+<a href="/songs/<%= song.id %>">←元のページに戻る</a>
+
+<%- include('../partials/footer') %>

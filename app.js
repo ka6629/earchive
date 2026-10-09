@@ -48,6 +48,25 @@ app.get('/songs/:id', async (req, res) => {
     res.render('songs/show', {title: song.title,song});
 });
 
+app.get('/songs/:id/edit', async (req, res) => {
+    const{ id } = req.params;
+    const [rows] = await pool.query('SELECT id, title, artist_name FROM songs WHERE id = ?', [id]);
+    if(rows.length === 0){
+        return res.status(404).send('曲が見つかりません');
+    }
+    const song = rows[0];
+    res.render('songs/edit', {title: '曲を編集', song});
+});
+
+app.post('/songs/:id/update', async (req, res) => {
+    const { id } = req.params;
+    const { title, artist_name } = req.body;
+    await pool.query('UPDATE songs SET title = ?, artist_name = ? WHERE id = ?',
+        [title, artist_name, id]
+    );
+    res.redirect(`/songs/${id}`);
+});
+
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT} is running`);
 });
