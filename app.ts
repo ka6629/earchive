@@ -1,5 +1,13 @@
 import express from 'express';
-import pool from './db/pool.js';
+import pool from './db/pool.ts';
+import type { RowDataPacket } from 'mysql2';
+
+type Song = RowDataPacket & {
+  id: number;
+  title: string;
+  artist_name: string;
+  created_at?: Date;
+}; 
 
 const app = express();
 const PORT = 3000;
@@ -17,7 +25,7 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/songs', async(req, res) => {
-    const [songs] = await pool.query(
+    const [songs] = await pool.query<Song[]>(
         'SELECT id, title, artist_name FROM songs ORDER BY id DESC'
     );
     res.render('songs/index', {title: '曲一覧', songs});
@@ -40,7 +48,7 @@ app.post('/songs', async (req, res) => {
 
 app.get('/songs/:id', async (req, res) => {
     const{ id } = req.params;
-    const [rows] = await pool.query('SELECT id, title, artist_name, created_at FROM songs WHERE id = ?', [id]);
+    const [rows] = await pool.query<Song[]>('SELECT id, title, artist_name, created_at FROM songs WHERE id = ?', [id]);
     if(rows.length === 0){
         return res.status(404).send('曲が見つかりません');
     }
@@ -50,7 +58,7 @@ app.get('/songs/:id', async (req, res) => {
 
 app.get('/songs/:id/edit', async (req, res) => {
     const{ id } = req.params;
-    const [rows] = await pool.query('SELECT id, title, artist_name FROM songs WHERE id = ?', [id]);
+    const [rows] = await pool.query<Song[]>('SELECT id, title, artist_name FROM songs WHERE id = ?', [id]);
     if(rows.length === 0){
         return res.status(404).send('曲が見つかりません');
     }
