@@ -1,6 +1,6 @@
 import express from 'express';
 import pool from './db/pool.ts';
-import type { RowDataPacket } from 'mysql2';
+import type { ResultSetHeader, RowDataPacket } from 'mysql2';
 
 type Song = RowDataPacket & {
   id: number;
@@ -36,14 +36,35 @@ app.get('/songs/new', (req, res) => {
 });
 
 app.post('/songs', async (req, res) => {
-    const { title, artist_name } = req.body;
+     const { title, artist_name } = req.body;
     const userId = 1; // 仮の値。Step 7でログイン中のユーザーに変える
 
-    await pool.query(
-        'INSERT INTO songs (title, artist_name, user_id) VALUES (?, ?, ?)',
-        [title, artist_name, userId]
-    );
-    res.redirect('/songs');
+    const conn = await pool.getConnection();
+    try {
+        await conn.beginTransaction();
+
+        // 曲を登録する
+        const [result] = await conn.query<ResultSetHeader>(
+            'INSERT INTO songs (title, artist_name, user_id) VALUES (?, ?, ?)',
+            [title, artist_name, userId]
+        );
+        const songId = result.insertId;
+
+        // TODO 2: その曲の「聴いた記録」を今日の日付で登録する
+       await conn.query(
+            'INSERT INTO listens (song_id, listened_on) VALUES (?, CURDATE())',
+            [songId]
+        );  
+
+        await conn.commit();
+        res.redirect('/songs');
+    } catch (err) {
+        await conn.rollback();
+        console.error(err);
+        res.status(500).send('曲の登録に失敗しました');
+    } finally {
+        conn.release();
+    }
 });
 
 app.get('/songs/:id', async (req, res) => {
